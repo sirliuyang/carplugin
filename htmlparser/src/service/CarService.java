@@ -17,12 +17,11 @@ public class CarService {
 		Car car = cardao.searchByName(newcar.getCarname());
 		if(car != null){
 			//System.out.println(car);
-			cardao.updateTotal(newcar);
+			if(car.getTotal_sales() < newcar.getTotal_sales())
+				cardao.updateTotal(newcar);
 		}else{
 			cardao.insert(newcar);
 		}
 	}
-	
-	//public 
 	
 }

@@ -17,10 +17,10 @@ import entity.Car;
 import entity.Price;
 import entity.Sales;
 import htmlparser.HtmlParser;
+import htmlparser.UrlCollector;
 import service.CarService;
 
 public class FromHtmlToDB {
-	HtmlParser parser = new HtmlParser();
 	
 	private static SqlSessionFactory sqlSessionFactory;
     private static Reader reader; 
@@ -36,46 +36,40 @@ public class FromHtmlToDB {
 	}
 	
 	public static void main(String[] args){
-		CarDao cardao = new CarDao(sqlSessionFactory);
-		PriceDao pricedao = new PriceDao(sqlSessionFactory);
-		SalesDao salesdao = new SalesDao(sqlSessionFactory);
-		CarService carservice = new CarService(sqlSessionFactory);
-		//List<Price> pricelist = pricedao.selectAll();
-		
-		boolean network = true;
-		
-		if(network){
+		List<String> urls = UrlCollector.collectUrl();
+		for(String url : urls){
+			HtmlParser htmlparser = new HtmlParser(url);
 			
-			HtmlParser htmlparser = new HtmlParser();
-			htmlparser.parseHTML();
-			List<Car> carlist = new ArrayList<Car>();
-			List<Sales> saleslist = new ArrayList<Sales>();
-			carlist = htmlparser.getCarList();
-			saleslist = htmlparser.getSalesList();
+			//PriceDao pricedao = new PriceDao(sqlSessionFactory);
+			//SalesDao salesdao = new SalesDao(sqlSessionFactory);
+			CarService carservice = new CarService(sqlSessionFactory);
+			//List<Price> pricelist = pricedao.selectAll();
+			boolean network = true;
 			
-			for(Car car : carlist){
-				//System.out.println(car);
-				carservice.saveCar(car);
-			}
-			/*
-			for(Sales sales : saleslist){
-				String carname = sales.getCarname();
-				if(cardao.getIdByName(carname) != null){
-					int id = cardao.getIdByName(carname);
-					sales.setId(id);
-					salesdao.insert(sales);
-					//System.out.println(sales);
+			if(network){	
+				htmlparser.parseHTML();
+				List<Car> carlist = new ArrayList<Car>();
+				List<Sales> saleslist = new ArrayList<Sales>();
+				carlist = htmlparser.getCarList();
+				saleslist = htmlparser.getSalesList();
+				
+				for(Car car : carlist){
+					//System.out.println(car);
+					carservice.saveCar(car);
 				}
+				/*
+				for(Sales sales : saleslist){
+					String carname = sales.getCarname();
+					if(cardao.getIdByName(carname) != null){
+						int id = cardao.getIdByName(carname);
+						sales.setId(id);
+						salesdao.insert(sales);
+						//System.out.println(sales);
+					}
+				}
+				*/
+			}else{
 			}
-			*/
-		}else{
-			Car car= cardao.searchByName("英朗");
-			System.out.println(car);
 		}
-		/*
-		for(Price price : pricelist){
-			System.out.println(price);
-		}
-		*/
 	}
 }

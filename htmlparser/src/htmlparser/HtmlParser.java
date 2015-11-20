@@ -20,8 +20,8 @@ public class HtmlParser {
 	private static List<Price> pricelist = new ArrayList<Price>();
 	private static List<Sales> saleslist = new ArrayList<Sales>();
 
-	private static String URL = "http://www.515fa.com/che_3797.html";
-			//"http://www.515ha.com/xiaoliang/1341.html";
+	private static String URL = "";
+	// "http://www.515ha.com/xiaoliang/1341.html";
 	private static String regex = ".*FFFFFF.*";
 
 	public static void printAll(Elements trs) {
@@ -30,8 +30,11 @@ public class HtmlParser {
 			for (int i = 0; i < tds.size(); i++) {
 				System.out.println(i + ", " + tds.get(i).text());
 			}
-
 		}
+	}
+	
+	public HtmlParser(String Url){
+		URL = Url;
 	}
 
 	public static void saveToDao(Elements trs) {
@@ -49,10 +52,9 @@ public class HtmlParser {
 					month = temp_car_info.substring(0, 8);
 					break;
 					// System.out.println(month);
-				} else if(i==0&&!temp_car_info.matches("^-?\\d+$")){
+				} else if (i == 0 && !temp_car_info.matches("^-?\\d+$")) {
 					break;
-				}
-				else{
+				} else {
 					price.setMonth(month);
 					sales.setMonth(DateTransfer.parserToDate(month));
 					switch (i) {
@@ -92,19 +94,24 @@ public class HtmlParser {
 		}
 	}
 
-	public boolean parseHTML() {
-		Document doc;
+	public static Elements getTrs() {
+		Elements trs = null;
 		try {
-			doc = Jsoup.connect(URL)
+			Document doc = Jsoup.connect(URL)
 					.header("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:33.0) Gecko/20100101 Firefox/33.0")
 					.timeout(20000).get();
 			Elements contents = doc.select("table[width=680]");
-			Elements trs = contents.get(0).select("tr");
-			//printAll(trs);
-			saveToDao(trs);
+			trs = contents.get(0).select("tr");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return trs;
+	}
+
+	public boolean parseHTML() {
+		Elements trs = getTrs();
+		// printAll(trs);
+		saveToDao(trs);
 		return true;
 	}
 

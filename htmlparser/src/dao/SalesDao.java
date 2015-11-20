@@ -6,23 +6,19 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import entity.Sales;
 
 public class SalesDao {
-	private SqlSessionFactory sqlSessionFactory;
+	private static SqlSessionFactory sqlSessionFactory;
+	private static SqlSession session;
 	
-	public SalesDao(SqlSessionFactory sqlSessionFactory){
-		this.sqlSessionFactory = sqlSessionFactory;
+	public SalesDao(SqlSessionFactory tsqlSessionFactory){
+		sqlSessionFactory = tsqlSessionFactory;
+		session = sqlSessionFactory.openSession();
 	}
 	
-	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
-		this.sqlSessionFactory = sqlSessionFactory;
-	}
-	
-
-	public SqlSession openSqlSession(){
-		return sqlSessionFactory.openSession();
+	public void setSqlSessionFactory(SqlSessionFactory tsqlSessionFactory) {
+		sqlSessionFactory = tsqlSessionFactory;
 	}
 	
 	public void insert(Sales sales) {
-		SqlSession session = openSqlSession();
 		session.insert("insertSales", sales);
 		session.commit();
 	}
