@@ -18,8 +18,17 @@ public class SalesDao {
 		sqlSessionFactory = tsqlSessionFactory;
 	}
 	
-	public void insert(Sales sales) {
+	public boolean insert(Sales sales) {
 		session.insert("insertSales", sales);
 		session.commit();
+		return true;
+	}
+	
+	public Sales select(Sales sales){
+		return session.selectOne("selectBySales", sales);
+	}
+	
+	public int update(Sales sales){
+		return session.update("update", sales);
 	}
 }

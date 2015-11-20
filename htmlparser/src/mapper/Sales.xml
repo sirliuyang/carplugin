@@ -17,4 +17,15 @@
 		#{sale_num},
 		#{month})
 	</insert>
+	
+	<!-- select Sales By Id-->
+	<select id="selectBySales" parameterType="Sales" resultType="Sales">
+		select * from `car_sales` where id = #{id} and month = #{month}
+	</select>
+	
+	<!-- update -->
+	 <update id="update" parameterType="Sales">  
+        update `car_sales` set carname = #{carname}, sale_num = #{sale_num}
+    </update>
+    
 </mapper>

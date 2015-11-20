@@ -19,6 +19,7 @@ import entity.Sales;
 import htmlparser.HtmlParser;
 import htmlparser.UrlCollector;
 import service.CarService;
+import service.SalesService;
 
 public class FromHtmlToDB {
 	
@@ -39,10 +40,9 @@ public class FromHtmlToDB {
 		List<String> urls = UrlCollector.collectUrl();
 		for(String url : urls){
 			HtmlParser htmlparser = new HtmlParser(url);
-			
-			//PriceDao pricedao = new PriceDao(sqlSessionFactory);
-			//SalesDao salesdao = new SalesDao(sqlSessionFactory);
+
 			CarService carservice = new CarService(sqlSessionFactory);
+			SalesService salesservice = new SalesService(sqlSessionFactory);
 			//List<Price> pricelist = pricedao.selectAll();
 			boolean network = true;
 			
@@ -57,17 +57,10 @@ public class FromHtmlToDB {
 					//System.out.println(car);
 					carservice.saveCar(car);
 				}
-				/*
+				
 				for(Sales sales : saleslist){
-					String carname = sales.getCarname();
-					if(cardao.getIdByName(carname) != null){
-						int id = cardao.getIdByName(carname);
-						sales.setId(id);
-						salesdao.insert(sales);
-						//System.out.println(sales);
-					}
+					salesservice.saveSales(sales);
 				}
-				*/
 			}else{
 			}
 		}

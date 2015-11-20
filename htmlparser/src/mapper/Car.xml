@@ -23,7 +23,7 @@
 		select id from `car_total` where carname = #{carname}
 	</select>
 	
-	<!--  -->
+	<!-- update -->
 	 <update id="updateTotal" parameterType="Car">  
         update `car_total` set total_sales = #{total_sales}  where carname = #{carname}
     </update>  
